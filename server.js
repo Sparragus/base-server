@@ -154,7 +154,15 @@ app.post('/log-in', function (req, res){
 	})
 })
 
+
+// Valor normal del port
+var port = 3000
+​
+// En caso de que nos encontremos en un ambiente de producción, leemos la variable de entorno
+if (process.env.NODE_ENV === 'production') {
+  port = process.env.PORT
+}
 // Termina la declaracion de url handlers
-app.listen(3000, function () {
+app.listen(port, function () {
 	console.log('Example app listening on port 3000!')
 })
