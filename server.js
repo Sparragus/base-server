@@ -6,6 +6,7 @@ var uuid = require('uuid')
 var bcrypt = require('bcrypt-nodejs')
 
 var session = require('express-session')
+var RedisStore = require('connect-redis')(session)
 var MongoStore = require('express-session-mongo')
 var flash = require('flash')
 
@@ -32,12 +33,23 @@ var User = mongoose.model('User', userSchema)
 var app = express()
 
 // Add sessions and flash
-app.use(session({
-	secret: 'keyboard cat',
+var sessionConfig = {
+	// secret: 'keyboard cat',
 	// store: new MongoStore(),
 	saveUninitialized: true,
 	resave: true
-}))
+}
+
+if (process.env.NODE_ENV === 'production') {
+	// sessionConfig.store = new RedisStro
+	sessionConfig.secret = 'WYYZ5epfgC3AmF348DNXXC3jsrtYgPv5hTMB6qYw'
+	sessionConfig.store = new RedisStore({url: process.env.REDISTOGO_URL})
+}else{
+	sessionConfig.secret = 'keyboard cat'
+	sessionConfig.store = new MongoStore()
+
+}
+app.use(session(sessionConfig))
 // Correr en MongoDB:
 // use express-sessions
 // db.sessions.ensureIndex( { "lastAccess": 1 }, { expireAfterSeconds: 3600 } )
