@@ -12,6 +12,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.14.2",
+    "connect-redis": "^3.0.2",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "express-session-mongo": "^0.1.0",

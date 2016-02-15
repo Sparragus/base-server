@@ -12,6 +12,11 @@ var flash = require('flash')
 var Schema = mongoose.Schema
 
 // mongoose.connect('mongodb://localhost/base-server')
+var dbURI = 'mongodb://localhost/base-server'
+if (process.env.NODE_ENV === 'production') {
+	dbURI = process.env.MONGOLAB_URI
+}
+mongoose.connect(dbURI)
 
 // Declara tus modelos en este espacio
 var userSchema = Schema({
@@ -152,6 +157,10 @@ app.post('/log-in', function (req, res){
 			res.redirect('/')
 		})
 	})
+})
+
+app.get('/env', function(req, res){
+	res.send(process.env)
 })
 
 var port = 3000
