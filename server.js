@@ -11,7 +11,7 @@ var flash = require('flash')
 
 var Schema = mongoose.Schema
 
-mongoose.connect('mongodb://localhost/base-server')
+// mongoose.connect('mongodb://localhost/base-server')
 
 // Declara tus modelos en este espacio
 var userSchema = Schema({
@@ -29,7 +29,7 @@ var app = express()
 // Add sessions and flash
 app.use(session({
 	secret: 'keyboard cat',
-	store: new MongoStore(),
+	// store: new MongoStore(),
 	saveUninitialized: true,
 	resave: true
 }))
