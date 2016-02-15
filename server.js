@@ -34,14 +34,11 @@ var app = express()
 
 // Add sessions and flash
 var sessionConfig = {
-	// secret: 'keyboard cat',
-	// store: new MongoStore(),
 	saveUninitialized: true,
 	resave: true
 }
 
 if (process.env.NODE_ENV === 'production') {
-	// sessionConfig.store = new RedisStro
 	sessionConfig.secret = 'WYYZ5epfgC3AmF348DNXXC3jsrtYgPv5hTMB6qYw'
 	sessionConfig.store = new RedisStore({url: process.env.REDISTOGO_URL})
 }else{
