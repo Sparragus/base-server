@@ -30,6 +30,8 @@ var userSchema = Schema({
 var User = mongoose.model('User', userSchema)
 // Termina la declaracion de modelos
 
+// Iniciamos el app de express
+// A la que le agregaremos plugins
 var app = express()
 
 // Add sessions and flash
@@ -38,6 +40,7 @@ var sessionConfig = {
 	resave: true
 }
 
+// Configuramos el store y secreto dependiendo si es heroku o local
 if (process.env.NODE_ENV === 'production') {
 	sessionConfig.secret = 'WYYZ5epfgC3AmF348DNXXC3jsrtYgPv5hTMB6qYw'
 	sessionConfig.store = new RedisStore({url: process.env.REDISTOGO_URL})
@@ -64,7 +67,11 @@ swig.setDefaults({cache:false})// <-- Cambiar a true en produccion
 // Agregamos body parser a express
 app.use( bodyParser.urlencoded({ extended:false }) )
 
-// Declara tus url handlers en este espacio
+// Agregamos soporte para archivos staticos como css, imagenes y js
+app.use('/assets', express.static('public'));
+
+// Middle ware para checar si tienemos un usuario en session
+// y agregarlo a res.locals
 app.use(function (req, res, next) {
 	if(!req.session.userId){
 		return next()
@@ -80,8 +87,13 @@ app.use(function (req, res, next) {
 	})
 });
 
+// Declara tus url handlers en este espacio
 app.get('/', function (req, res) {
 	res.render('index')
+})
+
+app.get('/profile', function(req, res){
+	res.render('profile')
 })
 
 app.get('/sign-up', function (req, res){
@@ -166,10 +178,6 @@ app.post('/log-in', function (req, res){
 			res.redirect('/')
 		})
 	})
-})
-
-app.get('/env', function(req, res){
-	res.send(process.env)
 })
 
 var port = 3000
