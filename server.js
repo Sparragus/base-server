@@ -44,7 +44,7 @@ var sessionConfig = {
 if (process.env.NODE_ENV === 'production') {
 	sessionConfig.secret = 'WYYZ5epfgC3AmF348DNXXC3jsrtYgPv5hTMB6qYw'
 	sessionConfig.store = new RedisStore({url: process.env.REDISTOGO_URL})
-}else{
+} else{
 	sessionConfig.secret = 'keyboard cat'
 	sessionConfig.store = new MongoStore()
 
@@ -62,7 +62,11 @@ app.set('views', __dirname + '/views')
 
 // Configurar cache
 app.set('view cache', false)
-swig.setDefaults({cache:false})// <-- Cambiar a true en produccion
+if (process.env.NODE_ENV === 'production') {
+  swig.setDefaults({cache:'memory'})
+} else {
+  swig.setDefaults({cache:false})
+}
 
 // Agregamos body parser a express
 app.use( bodyParser.urlencoded({ extended:false }) )
